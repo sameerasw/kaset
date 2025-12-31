@@ -107,6 +107,14 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         }
     }
 
+    /// Whether the full-screen player view is visible.
+    var isPlayerViewMode: Bool = false {
+        didSet {
+            // Closing player view should restore normal UI
+            self.logger.info("Player view mode: \(self.isPlayerViewMode)")
+        }
+    }
+
     // MARK: - Private Properties
 
     private let logger = DiagnosticsLogger.player

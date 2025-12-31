@@ -98,6 +98,17 @@ final class PlayerBarUITests: KasetUITestCase {
         XCTAssertTrue(waitForElement(lyricsButton, timeout: 10), "Lyrics button should exist")
     }
 
+    // MARK: - Player View Button
+
+    func testPlayerViewButtonExists() throws {
+        launchWithMockPlayer(isPlaying: true)
+
+        navigateToHome()
+
+        let playerViewButton = app.buttons["Player View"]
+        XCTAssertTrue(waitForElement(playerViewButton, timeout: 10), "Player View button should exist")
+    }
+
     // MARK: - Button Interactions
 
     func testShuffleButtonToggles() throws {

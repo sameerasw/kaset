@@ -137,27 +137,40 @@ struct MainWindow: View {
     @ViewBuilder
     private var mainContent: some View {
         if let client = ytMusicClient {
-            HStack(spacing: 0) {
-                // Main navigation content
-                NavigationSplitView(columnVisibility: self.$columnVisibility) {
-                    Sidebar(selection: self.$navigationSelection)
-                } detail: {
-                    self.detailView(for: self.navigationSelection, client: client)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
-                    // Ensure sidebar is visible when window becomes key (e.g., restored from dock)
-                    if self.columnVisibility != .all {
-                        self.columnVisibility = .all
+            ZStack {
+                HStack(spacing: 0) {
+                    // Main navigation content
+                    NavigationSplitView(columnVisibility: self.$columnVisibility) {
+                        Sidebar(selection: self.$navigationSelection)
+                    } detail: {
+                        self.detailView(for: self.navigationSelection, client: client)
                     }
-                }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+                        // Ensure sidebar is visible when window becomes key (e.g., restored from dock)
+                        if self.columnVisibility != .all {
+                            self.columnVisibility = .all
+                        }
+                    }
 
-                // Right sidebar - either lyrics or queue (mutually exclusive)
-                self.rightSidebarView(client: client)
+                    // Right sidebar - either lyrics or queue (mutually exclusive)
+                    self.rightSidebarView(client: client)
+                }
+                .opacity(self.playerService.isPlayerViewMode ? 0 : 1)
+                .blur(radius: self.playerService.isPlayerViewMode ? 20 : 0)
+                .disabled(self.playerService.isPlayerViewMode)
+
+                if self.playerService.isPlayerViewMode {
+                    PlayerFullView()
+                        .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
+                        .zIndex(1)
+                }
             }
+            .animation(.easeInOut(duration: 0.3), value: self.playerService.isPlayerViewMode)
             .animation(.easeInOut(duration: 0.2), value: self.playerService.showLyrics)
             .animation(.easeInOut(duration: 0.2), value: self.playerService.showQueue)
             .frame(minWidth: 900, minHeight: 600)
+            .toolbar(self.playerService.isPlayerViewMode ? .hidden : .visible, for: .windowToolbar)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -197,6 +210,15 @@ struct MainWindow: View {
         .frame(width: showRightSidebar ? 280 : 0)
         .opacity(showRightSidebar ? 1 : 0)
         .clipped()
+    }
+
+    private func viewModel<T>(for client: any YTMusicClientProtocol, keyPath: ReferenceWritableKeyPath<MainWindow, T?>, factory: (any YTMusicClientProtocol) -> T) -> T {
+        if let existing = self[keyPath: keyPath] {
+            return existing
+        }
+        let new = factory(client)
+        self[keyPath: keyPath] = new
+        return new
     }
 
     @ViewBuilder
@@ -365,3 +387,4 @@ enum NavigationItem: String, Hashable, CaseIterable, Identifiable {
         .environment(PlayerService())
         .environment(WebKitManager.shared)
 }
+
