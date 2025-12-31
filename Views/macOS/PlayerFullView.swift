@@ -11,6 +11,9 @@ struct PlayerFullView: View {
     /// Namespace for potential morphing transitions.
     @Namespace private var fullPlayerNamespace
 
+    /// State for full artwork immersion
+    @State private var isFullArtworkMode = false
+
     /// Local interaction states for smooth slider dragging (similar to PlayerBar)
     @State private var seekValue: Double = 0
     @State private var isSeeking = false
@@ -19,30 +22,16 @@ struct PlayerFullView: View {
 
     var body: some View {
         ZStack {
-            // Background: Heavily blurred album art
+            // Background: Heavily blurred album art (always present for depth)
             self.backgroundView
 
-            VStack(spacing: 0) {
-                // Top: Close Button
-                self.headerView
-
-                Spacer()
-
-                // Center: Immersive Content
-                VStack(spacing: 48) {
-                    self.artworkView
-
-                    VStack(spacing: 32) {
-                        self.trackInfoView
-                        self.controlsView
-                        self.slidersView
-                    }
-                    .frame(maxWidth: 600)
-                }
-
-                Spacer()
+            if self.isFullArtworkMode {
+                // Full Artwork Mode Layout
+                self.fullArtworkLayout
+            } else {
+                // Standard Player Layout
+                self.standardLayout
             }
-            .padding(.bottom, 60)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black)
@@ -62,6 +51,75 @@ struct PlayerFullView: View {
                 self.volumeValue = newValue
             }
         }
+    }
+
+    // MARK: - Layouts
+
+    private var standardLayout: some View {
+        VStack(spacing: 0) {
+            // Top: Close Button
+            self.headerView
+                .transition(.move(edge: .top).combined(with: .opacity))
+
+            Spacer()
+
+            // Center: Immersive Content
+            VStack(spacing: 48) {
+                self.artworkView
+                    .onTapGesture {
+                        withAnimation(AppAnimation.standard) {
+                            self.isFullArtworkMode = true
+                        }
+                    }
+
+                VStack(spacing: 32) {
+                    self.trackInfoView
+                    self.controlsView
+                    self.slidersView
+                }
+                .frame(maxWidth: 600)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            Spacer()
+        }
+        .padding(.bottom, 60)
+    }
+
+    private var fullArtworkLayout: some View {
+        ZStack {
+            // Fill background with artwork
+            self.artworkView
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+
+            // Bottom-Leading Track Info with wide gradient for readability
+            VStack {
+                Spacer()
+                VStack(alignment: .leading, spacing: 8) {
+                    self.trackInfoView
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 60)
+                .padding(.bottom, 60)
+                .padding(.top, 100) // Gradient height
+                .background(
+                    LinearGradient(
+                        colors: [.black.opacity(0.7), .black.opacity(0.35), .clear],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                )
+            }
+            .ignoresSafeArea()
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(AppAnimation.standard) {
+                self.isFullArtworkMode = false
+            }
+        }
+        .transition(.opacity)
     }
 
     // MARK: - Subviews
@@ -109,6 +167,7 @@ struct PlayerFullView: View {
             }
             .buttonStyle(.plain)
             .help("Exit Player View")
+            .keyboardShortcut(.escape, modifiers: [])
         }
         .padding(32)
     }
@@ -119,27 +178,27 @@ struct PlayerFullView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         } placeholder: {
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: self.isFullArtworkMode ? 0 : 24)
                 .fill(.white.opacity(0.05))
                 .overlay {
                     CassetteIcon(size: 100)
                         .foregroundStyle(.white.opacity(0.2))
                 }
         }
-        .frame(width: 380, height: 380)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .shadow(color: .black.opacity(0.6), radius: 40, x: 0, y: 20)
+        .frame(width: self.isFullArtworkMode ? nil : 380, height: self.isFullArtworkMode ? nil : 380)
+        .clipShape(RoundedRectangle(cornerRadius: self.isFullArtworkMode ? 0 : 24))
+        .shadow(color: .black.opacity(0.6), radius: self.isFullArtworkMode ? 0 : 40, x: 0, y: 20)
     }
 
     private var trackInfoView: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: self.isFullArtworkMode ? .leading : .center, spacing: 8) {
             Text(self.playerService.currentTrack?.title ?? "Not Playing")
-                .font(.system(size: 32, weight: .bold))
+                .font(.system(size: self.isFullArtworkMode ? 40 : 32, weight: .bold))
                 .foregroundStyle(.white)
                 .lineLimit(1)
 
             Text(self.playerService.currentTrack?.artistsDisplay ?? "Unknown Artist")
-                .font(.system(size: 20, weight: .medium))
+                .font(.system(size: self.isFullArtworkMode ? 24 : 20, weight: .medium))
                 .foregroundStyle(.white.opacity(0.6))
                 .lineLimit(1)
         }

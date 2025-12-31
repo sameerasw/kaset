@@ -165,6 +165,16 @@ struct MainWindow: View {
                         .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                         .zIndex(1)
                 }
+
+                // Global 'F' shortcut to toggle player view
+                Button("") {
+                    withAnimation(AppAnimation.standard) {
+                        self.playerService.isPlayerViewMode.toggle()
+                    }
+                }
+                .keyboardShortcut("f", modifiers: [])
+                .opacity(0)
+                .allowsHitTesting(false)
             }
             .animation(.easeInOut(duration: 0.3), value: self.playerService.isPlayerViewMode)
             .animation(.easeInOut(duration: 0.2), value: self.playerService.showLyrics)
