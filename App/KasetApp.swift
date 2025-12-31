@@ -131,6 +131,7 @@ struct KasetApp: App {
             SettingsView()
                 .environment(self.authService)
                 .environment(self.updaterService)
+                .environment(self.playerService)
         }
         .commands {
             // Check for Updates command in app menu
@@ -310,6 +311,13 @@ struct KasetApp: App {
                 await self.playerService.play(song: song)
             }
 
+        case let .lastfmAuth(token):
+            DiagnosticsLogger.app.info("Received Last.fm auth token")
+            let lastFmService = self.playerService.lastFmService
+            Task {
+                await lastFmService.handleAuthToken(token)
+            }
+
         case .playlist, .album, .artist:
             // Only song playback is supported via URL scheme
             DiagnosticsLogger.app.info("URL scheme only supports song playback")
@@ -334,6 +342,11 @@ struct SettingsView: View {
             IntelligenceSettingsView()
                 .tabItem {
                     Label("Intelligence", systemImage: "sparkles")
+                }
+
+            ScrobblingSettingsView()
+                .tabItem {
+                    Label("Scrobbling", systemImage: "music.note.list")
                 }
         }
         .frame(width: 450, height: 400)

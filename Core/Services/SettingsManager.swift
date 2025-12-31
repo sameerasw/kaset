@@ -13,6 +13,12 @@ final class SettingsManager {
         static let showNowPlayingNotifications = "settings.showNowPlayingNotifications"
         static let defaultLaunchPage = "settings.defaultLaunchPage"
         static let hapticFeedbackEnabled = "settings.hapticFeedbackEnabled"
+        
+        static let lastFmApiKey = "settings.lastFmApiKey"
+        static let lastFmSharedSecret = "settings.lastFmSharedSecret"
+        static let lastFmSessionKey = "settings.lastFmSessionKey"
+        static let lastFmUsername = "settings.lastFmUsername"
+        static let isLastFmScrobblingEnabled = "settings.isLastFmScrobblingEnabled"
     }
 
     // MARK: - Launch Page Options
@@ -81,6 +87,41 @@ final class SettingsManager {
         }
     }
 
+    /// Last.fm API Key provided by user.
+    var lastFmApiKey: String {
+        didSet {
+            UserDefaults.standard.set(self.lastFmApiKey, forKey: Keys.lastFmApiKey)
+        }
+    }
+
+    /// Last.fm Shared Secret provided by user.
+    var lastFmSharedSecret: String {
+        didSet {
+            UserDefaults.standard.set(self.lastFmSharedSecret, forKey: Keys.lastFmSharedSecret)
+        }
+    }
+
+    /// Last.fm Session Key obtained after login.
+    var lastFmSessionKey: String? {
+        didSet {
+            UserDefaults.standard.set(self.lastFmSessionKey, forKey: Keys.lastFmSessionKey)
+        }
+    }
+
+    /// Last.fm Username obtained after login.
+    var lastFmUsername: String? {
+        didSet {
+            UserDefaults.standard.set(self.lastFmUsername, forKey: Keys.lastFmUsername)
+        }
+    }
+
+    /// Whether Last.fm scrobbling is enabled.
+    var isLastFmScrobblingEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(self.isLastFmScrobblingEnabled, forKey: Keys.isLastFmScrobblingEnabled)
+        }
+    }
+
     /// The last page the user was on (for "Last Used" option).
     var lastUsedPage: LaunchPage = .home
 
@@ -90,6 +131,12 @@ final class SettingsManager {
         // Load persisted settings or use defaults
         self.showNowPlayingNotifications = UserDefaults.standard.object(forKey: Keys.showNowPlayingNotifications) as? Bool ?? true
         self.hapticFeedbackEnabled = UserDefaults.standard.object(forKey: Keys.hapticFeedbackEnabled) as? Bool ?? true
+        
+        self.lastFmApiKey = UserDefaults.standard.string(forKey: Keys.lastFmApiKey) ?? ""
+        self.lastFmSharedSecret = UserDefaults.standard.string(forKey: Keys.lastFmSharedSecret) ?? ""
+        self.lastFmSessionKey = UserDefaults.standard.string(forKey: Keys.lastFmSessionKey)
+        self.lastFmUsername = UserDefaults.standard.string(forKey: Keys.lastFmUsername)
+        self.isLastFmScrobblingEnabled = UserDefaults.standard.bool(forKey: Keys.isLastFmScrobblingEnabled)
 
         if let rawValue = UserDefaults.standard.string(forKey: Keys.defaultLaunchPage),
            let page = LaunchPage(rawValue: rawValue)

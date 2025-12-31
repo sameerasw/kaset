@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import os
+import CryptoKit
 
 // MARK: - PlayerService
 
@@ -121,6 +122,14 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         }
     }
 
+    /// Service for Last.fm scrobbling.
+    private(set) var lastFmService = LastFmService()
+
+    /// Track ID for which we've already sent "Now Playing" to Last.fm.
+    private var lastFmNowPlayingSentForTrackId: String?
+    /// Track ID for which we've already sent a scrobble to Last.fm.
+    private var lastFmScrobbleSentForTrackId: String?
+
     // MARK: - Private Properties
 
     private let logger = DiagnosticsLogger.player
@@ -197,6 +206,10 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         self.logger.info("Playing song: \(song.title)")
         self.state = .loading
         self.currentTrack = song
+        
+        // Reset Last.fm scrobbling state for the new track
+        self.lastFmNowPlayingSentForTrackId = nil
+        self.lastFmScrobbleSentForTrackId = nil
 
         // Use existing feedbackTokens if the song already has them
         if let tokens = song.feedbackTokens {
@@ -258,6 +271,42 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         if duration > 0, progress >= duration - 2, previousProgress < duration - 2 {
             self.songNearingEnd = true
         }
+        
+        // Last.fm Scrobbling Logic
+        self.handleScrobbling(progress: progress, duration: duration)
+    }
+
+    /// Handles Last.fm scrobbling logic based on playback progress.
+    private func handleScrobbling(progress: Double, duration: Double) {
+        guard let track = self.currentTrack, 
+              SettingsManager.shared.isLastFmScrobblingEnabled else { return }
+        
+        // Trigger both Now Playing and Scrobble immediately on first detection of a new track
+        if self.lastFmNowPlayingSentForTrackId != track.id {
+            let trackId = track.id
+            self.lastFmNowPlayingSentForTrackId = trackId
+            self.lastFmScrobbleSentForTrackId = trackId
+            let timestamp = Int(Date().timeIntervalSince1970)
+            
+            self.logger.info("Triggering immediate Last.fm scrobble for: \(track.title) (ID: \(trackId))")
+            
+            Task {
+                // 1. Update Now Playing status
+                await self.lastFmService.updateNowPlaying(
+                    artist: track.artistsDisplay,
+                    track: track.title,
+                    album: track.album?.title
+                )
+                
+                // 2. Send Scrobble immediately
+                await self.lastFmService.scrobble(
+                    artist: track.artistsDisplay,
+                    track: track.title,
+                    album: track.album?.title,
+                    timestamp: timestamp
+                )
+            }
+        }
     }
 
     /// Flag to track when a song is nearing its end.
@@ -311,9 +360,11 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
             videoId: videoId
         )
 
-        // Reset like/library status when track changes
+        // Reset like/library status and scrobbling state when track actually changes
         if trackChanged {
             self.resetTrackStatus()
+            self.lastFmNowPlayingSentForTrackId = nil
+            self.lastFmScrobbleSentForTrackId = nil
         }
     }
 
