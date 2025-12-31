@@ -66,7 +66,9 @@ struct PlaylistDetailView: View {
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if case .error = self.viewModel.loadingState {} else {
-                PlayerBar()
+                if !self.playerService.isSidebarMiniPlayerMode {
+                    PlayerBar()
+                }
             }
         }
         .task {

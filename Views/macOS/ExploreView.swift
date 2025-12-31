@@ -36,7 +36,9 @@ struct ExploreView: View {
             .navigationDestinations(client: self.viewModel.client)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
+            if !self.playerService.isSidebarMiniPlayerMode {
+                PlayerBar()
+            }
         }
         .onAppear {
             if self.viewModel.loadingState == .idle {

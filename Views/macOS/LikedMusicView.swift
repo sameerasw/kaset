@@ -63,7 +63,9 @@ struct LikedMusicView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
+            if !self.playerService.isSidebarMiniPlayerMode {
+                PlayerBar()
+            }
         }
         .task {
             if self.viewModel.loadingState == .idle {
