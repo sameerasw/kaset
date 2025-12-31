@@ -41,7 +41,9 @@ struct SearchView: View {
             .navigationDestinations(client: self.viewModel.client)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
+            if !self.playerService.isSidebarMiniPlayerMode {
+                PlayerBar()
+            }
         }
         .onAppear {
             self.isSearchFieldFocused = true

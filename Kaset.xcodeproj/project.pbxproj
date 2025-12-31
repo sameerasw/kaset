@@ -89,6 +89,8 @@
 		E50000010000000000000075 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000075 /* ImageCache.swift */; };
 		E50000010000000000000076 /* ColorExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000076 /* ColorExtractor.swift */; };
 		E50000010000000000000080 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000080 /* MainWindow.swift */; };
+		E50000010000000000000095 /* PlayerFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000095 /* PlayerFullView.swift */; };
+		E50000010000000000000096 /* SidebarMiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000096 /* SidebarMiniPlayerView.swift */; };
 		E50000010000000000000081 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000081 /* Sidebar.swift */; };
 		E50000010000000000000082 /* PlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000082 /* PlayerBar.swift */; };
 		E50000010000000000000083 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000020000000000000083 /* HomeView.swift */; };
@@ -265,6 +267,8 @@
 		E50000020000000000000075 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		E50000020000000000000076 /* ColorExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtractor.swift; sourceTree = "<group>"; };
 		E50000020000000000000080 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		E50000020000000000000095 /* PlayerFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFullView.swift; sourceTree = "<group>"; };
+		E50000020000000000000096 /* SidebarMiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarMiniPlayerView.swift; sourceTree = "<group>"; };
 		E50000020000000000000081 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		E50000020000000000000082 /* PlayerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBar.swift; sourceTree = "<group>"; };
 		E50000020000000000000083 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -695,6 +699,8 @@
 			isa = PBXGroup;
 			children = (
 				E50000020000000000000080 /* MainWindow.swift */,
+				E50000020000000000000095 /* PlayerFullView.swift */,
+				E50000020000000000000096 /* SidebarMiniPlayerView.swift */,
 				E50000020000000000000081 /* Sidebar.swift */,
 				E50000020000000000000082 /* PlayerBar.swift */,
 				E50000020000000000000083 /* HomeView.swift */,
@@ -935,6 +941,8 @@
 				E50000010000000000000070 /* DiagnosticsLogger.swift in Sources */,
 				E50000010000000000000071 /* Extensions.swift in Sources */,
 				E50000010000000000000080 /* MainWindow.swift in Sources */,
+				E50000010000000000000095 /* PlayerFullView.swift in Sources */,
+				E50000010000000000000096 /* SidebarMiniPlayerView.swift in Sources */,
 				E50000010000000000000081 /* Sidebar.swift in Sources */,
 				E50000010000000000000082 /* PlayerBar.swift in Sources */,
 				E50000010000000000000083 /* HomeView.swift in Sources */,

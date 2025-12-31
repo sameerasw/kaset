@@ -327,6 +327,38 @@ struct PlayerBar: View {
             AirPlayButton()
                 .frame(width: 20, height: 20)
 
+            // Sidebar Mini Player button
+            Button {
+                HapticService.navigation()
+                withAnimation(AppAnimation.standard) {
+                    self.playerService.isSidebarMiniPlayerMode.toggle()
+                }
+            } label: {
+                Image(systemName: "square.bottomthird.inset.filled")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(self.playerService.isSidebarMiniPlayerMode ? .red : .primary.opacity(0.85))
+            }
+            .buttonStyle(.pressable)
+            .help("Sidebar Mini Player")
+            .accessibilityLabel("Sidebar Mini Player")
+            .accessibilityIdentifier("SidebarMiniPlayerButton")
+
+            // Player View button
+            Button {
+                HapticService.navigation()
+                withAnimation(AppAnimation.standard) {
+                    self.playerService.isPlayerViewMode.toggle()
+                }
+            } label: {
+                Image(systemName: "music.note.tv")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(self.playerService.isPlayerViewMode ? .red : .primary.opacity(0.85))
+            }
+            .buttonStyle(.pressable)
+            .help("Player View")
+            .accessibilityLabel("Player View")
+            .accessibilityIdentifier("PlayerViewButton")
+
             Divider()
                 .frame(height: 20)
                 .padding(.horizontal, 4)

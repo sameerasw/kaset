@@ -3,6 +3,7 @@ import SwiftUI
 /// Sidebar navigation for the main window, styled like Apple Music.
 @available(macOS 26.0, *)
 struct Sidebar: View {
+    @Environment(PlayerService.self) private var playerService
     @Binding var selection: NavigationItem?
 
     /// Namespace for glass effect morphing.
@@ -61,8 +62,19 @@ struct Sidebar: View {
                 }
             }
             .listStyle(.sidebar)
+            .safeAreaInset(edge: .bottom) {
+                if self.playerService.isSidebarMiniPlayerMode {
+                    Color.clear.frame(height: 220) // Match mini player height + padding
+                }
+            }
             .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 300)
             .accessibilityIdentifier(AccessibilityID.Sidebar.container)
+            .overlay(alignment: .bottom) {
+                if self.playerService.isSidebarMiniPlayerMode {
+                    SidebarMiniPlayerView()
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
             .onChange(of: self.selection) { _, newValue in
                 if newValue != nil {
                     HapticService.navigation()

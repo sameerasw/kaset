@@ -107,6 +107,20 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         }
     }
 
+    /// Whether the full-screen player view is visible.
+    var isPlayerViewMode: Bool = false {
+        didSet {
+            logger.debug("isPlayerViewMode changed to: \(self.isPlayerViewMode)")
+        }
+    }
+
+    /// Whether the player is in sidebar mini mode (replacing the bottom bar)
+    var isSidebarMiniPlayerMode: Bool = false {
+        didSet {
+            logger.debug("isSidebarMiniPlayerMode changed to: \(self.isSidebarMiniPlayerMode)")
+        }
+    }
+
     // MARK: - Private Properties
 
     private let logger = DiagnosticsLogger.player
