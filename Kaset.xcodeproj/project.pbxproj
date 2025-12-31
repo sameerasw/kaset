@@ -60,7 +60,7 @@
 		B9BD7F6F2F05A48600511B09 /* MoodsAndGenresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD7F662F05A48600511B09 /* MoodsAndGenresView.swift */; };
 		B9BD7F702F05A48600511B09 /* NewReleasesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD7F672F05A48600511B09 /* NewReleasesView.swift */; };
 		B9BD7F712F05A48600511B09 /* CassetteIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD7F622F05A48600511B09 /* CassetteIcon.swift */; };
-		B9BD7F732F05A4B200511B09 /* LastFmService 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD7F722F05A4B200511B09 /* LastFmService 2.swift */; };
+		B9BD7F752F05A8C500511B09 /* LastFmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD7F742F05A8C500511B09 /* LastFmService.swift */; };
 		C1D2E3F4A5B6C7D8E9F0A1B2 /* MiniPlayerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E3F4A5B6C7D8E9F0A1B2C3 /* MiniPlayerViews.swift */; };
 		C8190591A078D2D9B63D378A /* MusicIntentIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD0EE4EB4A6F24FB0C9E93B /* MusicIntentIntegrationTests.swift */; };
 		C8190591A078D2D9B63D378B /* HapticServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD0EE4EB4A6F24FB0C9E93C /* HapticServiceTests.swift */; };
@@ -244,7 +244,7 @@
 		B9BD7F672F05A48600511B09 /* NewReleasesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleasesView.swift; sourceTree = "<group>"; };
 		B9BD7F682F05A48600511B09 /* ScrobblingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrobblingSettingsView.swift; sourceTree = "<group>"; };
 		B9BD7F692F05A48600511B09 /* TopSongsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSongsView.swift; sourceTree = "<group>"; };
-		B9BD7F722F05A4B200511B09 /* LastFmService 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LastFmService 2.swift"; sourceTree = "<group>"; };
+		B9BD7F742F05A8C500511B09 /* LastFmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastFmService.swift; sourceTree = "<group>"; };
 		C8E539792EF7A65A0032CA24 /* kaset.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = kaset.icon; sourceTree = "<group>"; };
 		CBABB9FAFB133BB2F35BDA14 /* AnimationModifiers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AnimationModifiers.swift; sourceTree = "<group>"; };
 		D2E3F4A5B6C7D8E9F0A1B2C3 /* MiniPlayerViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MiniPlayerViews.swift; sourceTree = "<group>"; };
@@ -647,7 +647,7 @@
 			children = (
 				E50000020000000000000040 /* PlayerService.swift */,
 				E50000020000000000000041 /* NowPlayingManager.swift */,
-				B9BD7F722F05A4B200511B09 /* LastFmService 2.swift */,
+				B9BD7F742F05A8C500511B09 /* LastFmService.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -946,6 +946,7 @@
 			files = (
 				E50000010000000000000000 /* AppDelegate.swift in Sources */,
 				E50000010000000000000001 /* KasetApp.swift in Sources */,
+				B9BD7F752F05A8C500511B09 /* LastFmService.swift in Sources */,
 				E50000010000000000000010 /* Song.swift in Sources */,
 				E50000010000000000000011 /* Playlist.swift in Sources */,
 				E50000010000000000000012 /* Album.swift in Sources */,
@@ -961,7 +962,6 @@
 				E50000010000000000000041 /* NowPlayingManager.swift in Sources */,
 				E50000010000000000000050 /* WebKitManager.swift in Sources */,
 				E50000010000000000000090 /* NotificationService.swift in Sources */,
-				B9BD7F732F05A4B200511B09 /* LastFmService 2.swift in Sources */,
 				E50000010000000000000060 /* HomeViewModel.swift in Sources */,
 				E50000010000000000000061 /* LibraryViewModel.swift in Sources */,
 				E50000010000000000000062 /* SearchViewModel.swift in Sources */,
