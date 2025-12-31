@@ -279,26 +279,32 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     /// Handles Last.fm scrobbling logic based on playback progress.
     private func handleScrobbling(progress: Double, duration: Double) {
         guard let track = self.currentTrack, 
-              SettingsManager.shared.isLastFmScrobblingEnabled else { return }
+              SettingsManager.shared.isLastFmScrobblingEnabled,
+              track.title != "Loading..." else { return }
         
-        // Trigger both Now Playing and Scrobble immediately on first detection of a new track
-        if self.lastFmNowPlayingSentForTrackId != track.id {
-            let trackId = track.id
+        let trackId = track.id
+        let timestamp = Int(Date().timeIntervalSince1970)
+        
+        // 1. Trigger Now Playing status if new or reset
+        if self.lastFmNowPlayingSentForTrackId != trackId {
             self.lastFmNowPlayingSentForTrackId = trackId
-            self.lastFmScrobbleSentForTrackId = trackId
-            let timestamp = Int(Date().timeIntervalSince1970)
-            
-            self.logger.info("Triggering immediate Last.fm scrobble for: \(track.title) (ID: \(trackId))")
             
             Task {
-                // 1. Update Now Playing status
                 await self.lastFmService.updateNowPlaying(
                     artist: track.artistsDisplay,
                     track: track.title,
                     album: track.album?.title
                 )
-                
-                // 2. Send Scrobble immediately
+            }
+        }
+        
+        // 2. Trigger Scrobble immediately if not yet sent for this track ID
+        if self.lastFmScrobbleSentForTrackId != trackId {
+            self.lastFmScrobbleSentForTrackId = trackId
+            
+            self.logger.info("Triggering immediate Last.fm scrobble for: \(track.title) (ID: \(trackId))")
+            
+            Task {
                 await self.lastFmService.scrobble(
                     artist: track.artistsDisplay,
                     track: track.title,
@@ -363,8 +369,9 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
         // Reset like/library status and scrobbling state when track actually changes
         if trackChanged {
             self.resetTrackStatus()
+            // Only reset Now Playing flag to allow metadata updates (e.g. "Artist A" -> "Artist A & B")
+            // Do NOT reset scrobble flag to prevent duplicate scrobbles for the same video ID
             self.lastFmNowPlayingSentForTrackId = nil
-            self.lastFmScrobbleSentForTrackId = nil
         }
     }
 
