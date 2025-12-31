@@ -30,6 +30,9 @@ enum URLHandler {
 
         /// An artist/channel to open.
         case artist(id: String)
+        
+        /// Last.fm authentication token.
+        case lastfmAuth(token: String)
     }
 
     // MARK: - URL Parsing
@@ -88,6 +91,12 @@ enum URLHandler {
             // kaset://artist?id=artistId
             if let artistId = Self.queryValue(for: "id", in: queryItems), !artistId.isEmpty {
                 return .artist(id: artistId)
+            }
+            
+        case "lastfm-auth":
+            // kaset://lastfm-auth?token=token
+            if let token = Self.queryValue(for: "token", in: queryItems), !token.isEmpty {
+                return .lastfmAuth(token: token)
             }
 
         default:

@@ -35,4 +35,7 @@ enum DiagnosticsLogger {
 
     /// Logger for app lifecycle and URL handling events.
     static let app = Logger(subsystem: "com.sertacozercan.Kaset", category: "App")
+
+    /// Logger for scrobbling-related events.
+    static let scrobble = Logger(subsystem: "com.sertacozercan.Kaset", category: "Scrobble")
 }
